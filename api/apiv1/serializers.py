@@ -1,8 +1,7 @@
 from rest_framework import serializers
-from rest_framework.serializers import SerializerMethodField
 
 from django.contrib.auth.models import User
-from api.task_management.models import *
+from task_management.models import Category, Task, Profile
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -41,7 +40,7 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = [
-            "id", "task", 'description', 'criteria', 'status', 'status_name', 'category', 'category_item','estimate',
+            "id", "title", 'description', 'criteria', 'status', 'status_name', 'category', 'category_item', 'estimate',
             'responsible', 'responsible_username', 'owner', 'owner_username', 'created_at', 'updated_at'
-            ]
+        ]
         extra_kwargs = {'owner': {'read_only': True}}

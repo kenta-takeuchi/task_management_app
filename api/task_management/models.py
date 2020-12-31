@@ -6,10 +6,7 @@ import uuid
 
 
 class Profile(models.Model):
-    user_profile = models.OneToOneField(
-        User, related_name='user_profile',
-        on_delete=models.CASCADE
-    )
+    user_profile = models.OneToOneField(User, related_name='user_profile', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user_profile.username
@@ -28,6 +25,7 @@ class Task(models.Model):
         ('2', 'Doing'),
         ('3', 'Done')
     )
+
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=300)
