@@ -11,7 +11,6 @@ import {
     JWT,
     USER
 } from "../types";
-import {findRenderedComponentWithType} from "react-dom/test-utils";
 
 export const fetchAsyncLogin = createAsyncThunk(
     "auth/login",
@@ -45,7 +44,7 @@ export const fetchAsyncRegister = createAsyncThunk(
     }
 )
 
-export const fetchAsyncFetMyProf = createAsyncThunk(
+export const fetchAsyncGetMyProf = createAsyncThunk(
     "auth/loginuser",
     async () => {
         const res = await axios.get<LOGIN_USER>(
@@ -70,7 +69,8 @@ export const fetchAsyncGetProfs = createAsyncThunk(
                     Authorization: `JWT ${localStorage.localJWT}`
                 }
             }
-        )
+        );
+        return res.data
     }
 )
 
@@ -86,11 +86,46 @@ const initialState: AUTH_STATE = {
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
-    reducers: {},
+    reducers: {
+        toggleMode(state) {
+            state.isLoginView = !state.isLoginView;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(
+            fetchAsyncLogin.fulfilled,
+            (state, action: PayloadAction<JWT>) => {
+                localStorage.setItem("localJWT", action.payload.access);
+                action.payload.access && (window.location.href = "/tasks")
+            }
+        );
+        builder.addCase(
+            fetchAsyncGetMyProf.fulfilled,
+            (state, action: PayloadAction<LOGIN_USER>) => {
+                return {
+                    ...state,
+                    loginUser: action.payload,
+                }
+            }
+        );
+        builder.addCase(
+            fetchAsyncGetProfs.fulfilled,
+            (state, action: PayloadAction<PROFILE[]>) => {
+                return {
+                    ...state,
+                    profiles: action.payload,
+                };
+            }
+        );
+    },
 });
 
-export const {} = authSlice.actions;
+export const { toggleMode } = authSlice.actions;
 
-export const selectCount = (state: RootState) => state.counter.value;
+export const selectIsLoginView = (state: RootState) => state.auth.isLoginView;
+export const selectLoginUser = (state: RootState) => state.auth.loginUser;
+export const selectProfiles = (state: RootState) => state.auth.profiles;
+
+
 
 export default authSlice.reducer;
