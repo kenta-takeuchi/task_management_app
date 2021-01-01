@@ -6,7 +6,7 @@ import {READ_TASK, POST_TASK, TASK_STATE, CATEGORY, USER} from "../types";
 
 export const fetchAsyncGetTasks = createAsyncThunk("task/getTask", async () => {
     const res = await axios.get<READ_TASK[]>(
-        `${process.env.REACT_APP_API_URL}/api/tasks/`,
+        `${process.env.REACT_APP_API_URL}/api/v1/task/`,
         {
             headers: {
                 Authorization: `JWT ${localStorage.localJWT}`,
@@ -20,7 +20,7 @@ export const fetchAsyncGetUsers = createAsyncThunk(
     "task/getUsers",
     async () => {
         const res = await axios.get<USER[]>(
-            `${process.env.REACT_APP_API_URL}/api/users/`,
+            `${process.env.REACT_APP_API_URL}/api/v1/users/`,
             {
                 headers: {
                     Authorization: `JWT ${localStorage.localJWT}`,
@@ -35,7 +35,7 @@ export const fetchAsyncGetCategory = createAsyncThunk(
     "task/getCategory",
     async () => {
         const res = await axios.get<CATEGORY[]>(
-            `${process.env.REACT_APP_API_URL}/api/category/`,
+            `${process.env.REACT_APP_API_URL}/api/v1/category/`,
             {
                 headers: {
                     Authorization: `JWT ${localStorage.localJWT}`,
@@ -50,7 +50,7 @@ export const fetchAsyncCreateCategory = createAsyncThunk(
     "task/createCategory",
     async (item: string) => {
         const res = await axios.post<CATEGORY>(
-            `${process.env.REACT_APP_API_URL}/api/category/`,
+            `${process.env.REACT_APP_API_URL}/api/v1/category/`,
             {item: item},
             {
                 headers: {
@@ -66,7 +66,7 @@ export const fetchAsyncCreateTask = createAsyncThunk(
     "task/createTask",
     async (task: POST_TASK) => {
         const res = await axios.post<READ_TASK>(
-            `${process.env.REACT_APP_API_URL}/api/tasks/`,
+            `${process.env.REACT_APP_API_URL}/api/v1/task/`,
             task,
             {
                 headers: {
@@ -83,7 +83,7 @@ export const fetchAsyncUpdateTask = createAsyncThunk(
     "task/updateTask",
     async (task: POST_TASK) => {
         const res = await axios.put<READ_TASK>(
-            `${process.env.REACT_APP_API_URL}/api/tasks/${task.id}/`,
+            `${process.env.REACT_APP_API_URL}/api/v1/task/${task.id}/`,
             task,
             {
                 headers: {
@@ -99,7 +99,7 @@ export const fetchAsyncUpdateTask = createAsyncThunk(
 export const fetchAsyncDeleteTask = createAsyncThunk(
     "task/deleteTask",
     async (id: number) => {
-        await axios.delete(`${process.env.REACT_APP_API_URL}/api/tasks/${id}/`, {
+        await axios.delete(`${process.env.REACT_APP_API_URL}/api/v1/task/${id}/`, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `JWT ${localStorage.localJWT}`,
@@ -271,7 +271,12 @@ export const taskSlice = createSlice({
     },
 })
 
-export const {editTask, selectTask} = taskSlice.actions;
+export const {editTask, selectTask} = taskSlice.actions
+export const selectSelectedTask = (state: RootState) => state.task.selectedTask;
+export const selectEditedTask = (state: RootState) => state.task.editedTask;
+export const selectTasks = (state: RootState) => state.task.tasks;
+export const selectUsers = (state: RootState) => state.task.users;
+export const selectCategory = (state: RootState) => state.task.category;
 export default taskSlice.reducer
 
 
