@@ -57,6 +57,7 @@ const Auth: React.FC = () => {
                 value={credential.username}
                 onChange={handleInputChange}
                 />
+                <br />
             <TextField
                 InputLabelProps={{
                     shrink: true,
@@ -77,7 +78,7 @@ const Auth: React.FC = () => {
                     {isLoginView ? "Login": "Register"}
                 </Button>
             <span onClick={() => dispatch(toggleMode())}>
-                {isLoginView ? "Create new account" ? "Back to Login"}
+                {isLoginView ? "Create new account" : "Back to Login"}
             </span>
         </div>
     )
